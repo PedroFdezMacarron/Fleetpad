@@ -230,28 +230,28 @@
 
         var tabla = document.getElementById("tablaSumaValores"); // Cambia "miTabla" por el ID de tu tabla
         var filas = tabla.getElementsByTagName("tr");
-  var columnasTitulo = tabla.querySelectorAll("th");
-  var data = [];
+        var columnasTitulo = tabla.querySelectorAll("th");
+        var data = [];
 
-  // Iterar a través de las filas, excluyendo la primera fila que contiene los títulos
-  for (var i = 1; i < filas.length; i++) {
-    var fila = filas[i];
-    var rowData = {};
+        // Iterar a través de las filas, excluyendo la primera fila que contiene los títulos
+        for (var i = 1; i < filas.length; i++) {
+          var fila = filas[i];
+          var rowData = {};
 
-    // Obtener el valor de la primera columna y agregarlo al objeto JSON como "Concepto"
-    var primeraColumna = fila.getElementsByTagName("th")[0].textContent;
-    rowData["Concepto"] = primeraColumna;
+          // Obtener el valor de la primera columna y agregarlo al objeto JSON como "Concepto"
+          var primeraColumna = fila.getElementsByTagName("th")[0].textContent;
+          rowData["Concepto"] = primeraColumna;
 
-    // Iterar a través de las celdas de la fila, excluyendo la primera celda
-    var celdas = fila.getElementsByTagName("td");
-    for (var j = 1; j < celdas.length; j++) {
-      var columnaTitulo = columnasTitulo[j].textContent;
-      var valorCelda = celdas[j].textContent;
-      rowData[columnaTitulo] = valorCelda;
-    }
+          // Iterar a través de las celdas de la fila, excluyendo la primera celda
+          var celdas = fila.getElementsByTagName("td");
+          for (var j = 1; j < celdas.length; j++) {
+            var columnaTitulo = columnasTitulo[j].textContent;
+            var valorCelda = celdas[j].textContent;
+            rowData[columnaTitulo] = valorCelda;
+          }
 
-    // Agregar el objeto JSON al array
-    data.push(rowData);
+          // Agregar el objeto JSON al array
+          data.push(rowData);
         }
 
         exportToExcel2(data, "datos"); // Llama a la función para exportar los datos a Excel
