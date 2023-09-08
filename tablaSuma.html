@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Tabla de Suma de Valores</title>
+    <style>
+      table {
+        background-color: rgb(230, 220, 205);
+        border-collapse: collapse;
+        width: 100%;
+        margin: 20px auto;
+        font-family: sans-serif;
+        font-size: small;
+      }
+
+      table,
+      th,
+      td {
+        border: 1px solid black;
+      }
+
+      th,
+      td {
+        padding: 5px;
+        text-align: center;
+      }
+      .cabecera {
+        text-align: center;
+        background-color: rgba(173, 161, 144, 0.772);
+      }
+      .columna1 {
+        text-align: left;
+        background-color: rgba(173, 161, 144, 0.772);
+      }
+      .columnax {
+        text-align: left;
+        background-color: rgba(200, 231, 24, 0.851);
+      }
+      .datox {
+        text-align: center;
+        background-color: rgba(200, 231, 24, 0.851);
+      }
+    </style>
+  </head>
+
+  <body>
+    <table id="tablaSumaValores">
+      <thead>
+        <tr>
+          <th></th>
+          <!-- Columnas para los valores de "periodo" -->
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Filas para los valores de "concepto" y celdas para las sumas de "valor" -->
+      </tbody>
+    </table>
+
+    <!-- use xlsx.full.min.js from version 0.20.0 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+
+    <script>
+      // Datos de ejemplo: un array de objetos JSON
+      var datos = [
+        { concepto: "Concepto 1", periodo: " 1", valor: 10 },
+        { concepto: "Concepto 1", periodo: " 1", valor: 20 },
+        { concepto: "Concepto 1", periodo: " 2", valor: 30 },
+        { concepto: "Concepto 2", periodo: " 2", valor: 40 },
+        { concepto: "Concepto 2", periodo: " 3", valor: 50 },
+        { concepto: "Concepto 2", periodo: " 3", valor: 60 },
+      ];
+
+      // Función para crear la tabla y calcular la suma de valores
+      let tbody2 = "inicial";
+      function crearTabla(datos) {
+        var periodos = [];
+        var conceptos = [];
+
+        // Obtener la lista de periodos y conceptos únicos
+        datos.forEach(function (item) {
+          if (!periodos.includes(item.periodo)) {
+            periodos.push(item.periodo);
+          }
+          if (!conceptos.includes(item.concepto)) {
+            conceptos.push(item.concepto);
+          }
+        });
+
+        // Crear la fila de encabezado con los periodos
+        var thead = document.querySelector("#tablaSumaValores thead tr");
+        periodos.forEach(function (periodo) {
+          thead.innerHTML += "<th class='cabecera'>" + periodo + "</th>";
+        });
+
+        // Crear las filas y calcular las sumas de valores
+        var tbody = document.querySelector("#tablaSumaValores tbody");
+        conceptos.forEach(function (concepto) {
+          if (concepto == "Uber Economics web - Facturación") {
+            var fila = "<tr><th class='columnax'>" + concepto + "</th>";
+          } else {
+            var fila = "<tr><th class='columna1'>" + concepto + "</th>";
+          }
+
+          periodos.forEach(function (periodo) {
+            var suma = 0;
+            datos.forEach(function (item) {
+              if (item.concepto === concepto && item.periodo === periodo) {
+                // suma += item.valor;
+                suma += parseFloat(item.valor);
+              }
+            });
+            if (concepto == "Uber Economics web - Facturación") {
+              fila += "<td class='datox'>" + suma + "</td>";
+            } else {
+              fila += "<td>" + suma + "</td>";
+            }
+          });
+          fila += "</tr>";
+          tbody.innerHTML += fila;
+        });
+      }
+
+      // Llamar a la función para crear la tabla
+      function CargaDatos(datosFm) {
+        datos = csvTextToJson(datosFm);
+        // console.log(datos);
+        crearTabla(datos);
+      }
+
+      function csvTextToJson(csvText) {
+        const lines = csvText.trim().split(/\r\n|\n|\r/); // Detecta diferentes tipos de saltos de línea
+        const headers = lines[0].split(",").map((header) => header.trim());
+        const result = [];
+        console.log(lines.length);
+
+        for (let i = 1; i < lines.length; i++) {
+          const data = lines[i].split(",").map((value) => value.trim());
+          if (data.length !== headers.length) {
+            throw new Error(
+              `El número de columnas en la fila ${
+                i + 1
+              } no coincide con los encabezados.`
+            );
+          }
+
+          const obj = {};
+          for (let j = 0; j < headers.length; j++) {
+            obj[headers[j]] = data[j];
+          }
+          result.push(obj);
+        }
+
+        return result;
+      }
+
+      function parseStringToJsonArray(inputString) {
+        // Utilizamos una expresión regular para buscar números y booleanos
+        const regex = /("[^"]*")|(\b\d+\b)|(\btrue\b|\bfalse\b)/g;
+
+        // Encuentra todos los coincidencias en la cadena de entrada
+        const matches = inputString.match(regex);
+
+        if (!matches) {
+          return [];
+        }
+
+        // Mapeamos las coincidencias en un array de objetos JSON
+        const jsonArray = matches.map((match) => {
+          // Si la coincidencia es un número o un booleano, la dejamos sin comillas
+          if (/^\d+$/.test(match) || match === "true" || match === "false") {
+            return JSON.parse(match);
+          }
+          // Si es una cadena, la dejamos como está
+          return JSON.parse(`"${match}"`);
+        });
+
+        return jsonArray;
+      }
+
+      function exportToExcel2(data, fileName) {
+        var workbook = new ExcelJS.Workbook();
+        var worksheet = workbook.addWorksheet("Sheet1");
+
+        // Agrega encabezados
+        var headers = Object.keys(data[0]);
+        worksheet.addRow(headers);
+
+        // Agrega filas de datos
+        data.forEach((row) => {
+          var rowData = [];
+          headers.forEach((header) => {
+            rowData.push(row[header]);
+          });
+          worksheet.addRow(rowData);
+        });
+
+        // Crea un objeto Blob con el archivo Excel
+        workbook.xlsx.writeBuffer().then((buffer) => {
+          var blob = new Blob([buffer], {
+            type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          });
+
+          // Crea un objeto URL para el blob
+          var url = URL.createObjectURL(blob);
+
+          // Crea un enlace para descargar el archivo Excel
+          var a = document.createElement("a");
+          a.href = url;
+          a.download = fileName + ".xlsx";
+          a.style.display = "none";
+
+          // Agrega el enlace al documento y haz clic en él para iniciar la descarga
+          document.body.appendChild(a);
+          a.click();
+
+          // Limpia el objeto URL y elimina el enlace
+          window.URL.revokeObjectURL(url);
+          document.body.removeChild(a);
+        });
+      }
+
+      // Ejemplo de uso:
+      var dataToExport = [
+        { Nombre: "Juan", Edad: 30, Ciudad: "Madrid" },
+        { Nombre: "Ana", Edad: 25, Ciudad: "Barcelona" },
+        { Nombre: "Carlos", Edad: 35, Ciudad: "Valencia" },
+      ];
+
+      function exportToExcel() {
+        console.log("export");
+
+        var tabla = document.getElementById("tablaSumaValores"); // Cambia "miTabla" por el ID de tu tabla
+        var filas = tabla.getElementsByTagName("tr");
+  var columnasTitulo = tabla.querySelectorAll("th");
+  var data = [];
+
+  // Iterar a través de las filas, excluyendo la primera fila que contiene los títulos
+  for (var i = 1; i < filas.length; i++) {
+    var fila = filas[i];
+    var rowData = {};
+
+    // Obtener el valor de la primera columna y agregarlo al objeto JSON como "Concepto"
+    var primeraColumna = fila.getElementsByTagName("th")[0].textContent;
+    rowData["Concepto"] = primeraColumna;
+
+    // Iterar a través de las celdas de la fila, excluyendo la primera celda
+    var celdas = fila.getElementsByTagName("td");
+    for (var j = 1; j < celdas.length; j++) {
+      var columnaTitulo = columnasTitulo[j].textContent;
+      var valorCelda = celdas[j].textContent;
+      rowData[columnaTitulo] = valorCelda;
+    }
+
+    // Agregar el objeto JSON al array
+    data.push(rowData);
+        }
+
+        exportToExcel2(data, "datos"); // Llama a la función para exportar los datos a Excel
+      }
+    </script>
+  </body>
+</html>

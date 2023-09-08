@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    border: 1px solid #ddd;
+  }
+  th, td {
+    text-align: left;
+    padding: 8px;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+</style>
+<title>Lista de Coches</title>
+</head>
+<body>
+<h1>Lista de Coches</h1>
+<table>
+  <tr>
+    <th>Marca</th>
+    <th>Modelo</th>
+    <th>Color</th>
+    <th>Potencia</th>
+    <th>Transmisión</th>
+    <th>Combustible</th>
+    <th>Año</th>
+    <th>Tracción</th>
+    <th>Precio</th>
+  </tr>
+</table>
+
+<script>
+  function CargaDatos(coches) {
+    let lcoches = JSON.parse(coches);
+    console.log(lcoches);
+    const table = document.querySelector('table');
+
+    lcoches.forEach(coche => {
+      console.log(coche.Marca);
+
+      const row = table.insertRow();
+
+      const cellMarca = row.insertCell();
+      cellMarca.textContent = coche.Marca;
+
+      const cellModelo = row.insertCell();
+      cellModelo.textContent = coche.Modelo;
+
+      const cellColor = row.insertCell();
+      cellColor.textContent = coche.Color;
+
+      const cellPotencia = row.insertCell();
+      cellPotencia.textContent = coche.Potencia;
+
+      const cellTransmision = row.insertCell();
+      cellTransmision.textContent = coche.Transmisión;
+      
+      const cellCombustible = row.insertCell();
+      cellCombustible.textContent = coche.Combustible;
+
+      const cellAño = row.insertCell();
+      cellAño.textContent = coche.Año;
+
+      const cellTraccion = row.insertCell();
+      cellTraccion.textContent = coche.Tracción;
+
+      const cellPrecio = row.insertCell();
+      cellPrecio.textContent = coche.Precio;
+     
+    });
+  }
+
+
+
+  
+</script>
+</body>
+</html>

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        div { padding-bottom: 0.5em; }
+    </style>
+     <script>
+        function submitForm() {
+            let name = document.getElementById("name").value;
+            let rating = document.getElementById("rating").value; 
+            let color = document.getElementById("color").value;
+            let param = name + '\n' + rating + '\n' + color;
+            FileMaker.PerformScriptWithOption("Guardar datos del formulario Web", param, "0");
+        }
+
+        function setUserData(name, rating, color) {
+            document.getElementById("name").value = name; 
+            document.getElementById("rating").value = rating; 
+            document.getElementById("color").value = color;
+        } 
+    </script>
+</head>
+<body>
+    <div>
+        <label for="name">Nombre:<br></label>
+        <input id="name" type="text" value="default">
+    </div>
+    <div>
+        <label for="rating">Calificación:<br></label>
+        0 <input id="rating" type="range" min="0" max="10"> 10
+    </div>
+    <div>
+        <label for="color">Color favorito:<br></label>
+        <input id="color" type="color">
+    </div>
+    <button onclick="submitForm()">Enviar</button>
+</body>
+</html>

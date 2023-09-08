@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ficha de Coche</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #8c8b8b;
+  }
+  .car-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+    margin: 0 auto;
+  }
+  .car-property {
+    margin-bottom: 15px;
+  }
+  .car-property label {
+    font-weight: bold;
+    display: block;
+    margin-bottom: 5px;
+  }
+  .car-property span {
+    display: inline-block;
+    color: #555;
+  }
+</style>
+</head>
+<body>
+<div class="car-card" id="carDetails">
+</div>
+
+<script>
+  function CargaDatos(datosCoche) {
+    datosCoche = JSON.parse(datosCoche)
+    console.log(datosCoche);
+    var carDetails = document.getElementById("carDetails");
+    var fichaHTML = `
+      <div class="car-property">
+        <label>Marca:</label>
+        <span>${datosCoche.marca}</span>
+      </div>
+      <div class="car-property">
+        <label>Modelo:</label>
+        <span>${datosCoche.modelo}</span>
+      </div>
+      <div class="car-property">
+        <label>Año:</label>
+        <span>${datosCoche.anio}</span>
+      </div>
+      <div class="car-property">
+        <label>Color:</label>
+        <span>${datosCoche.color}</span>
+      </div>
+      <div class="car-property">
+        <label>Potencia:</label>
+        <span>${datosCoche.potencia}</span>
+      </div>
+      <div class="car-property">
+        <label>Transmisión:</label>
+        <span>${datosCoche.transmision}</span>
+      </div>
+      <div class="car-property">
+        <label>Combustible:</label>
+        <span>${datosCoche.combustible}</span>
+      </div>
+      <div class="car-property">
+        <label>Tracción:</label>
+        <span>${datosCoche.traccion}</span>
+      </div>
+      <div class="car-property">
+        <label>Precio:</label>
+        <span>${datosCoche.precio}</span>
+      </div>
+    `;
+    
+    carDetails.innerHTML = fichaHTML;
+  }
+
+
+</script>
+</body>
+</html>

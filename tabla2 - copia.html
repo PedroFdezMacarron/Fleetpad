@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tabla de Datos</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 180%;
+            margin: 20px auto;
+            font-size: small;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        th:first-child, td:first-child {
+            width: 10%;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <table id="tablaDatos">
+        <!-- La tabla se llenará dinámicamente aquí -->
+    </table>
+
+    <script>
+        // Función para crear la tabla a partir del JSON
+        function crearTablaDesdeJSON(data) {
+            var table = document.getElementById("tablaDatos");
+            var fechasUnicas = obtenerFechasUnicas(data);
+
+            // Crear fila de encabezado con las fechas únicas
+            var headerRow = table.insertRow();
+            var conceptoHeaderCell = headerRow.insertCell(0);
+            conceptoHeaderCell.textContent = "Concepto";
+
+            for (var i = 0; i < fechasUnicas.length; i++) {
+                var th = document.createElement("th");
+                th.textContent = fechasUnicas[i];
+                headerRow.appendChild(th);
+            }
+
+            // Llenar la tabla con datos
+            var conceptosUnicos = obtenerConceptosUnicos(data);
+            for (var i = 0; i < conceptosUnicos.length; i++) {
+                var row = table.insertRow();
+                var conceptoCell = row.insertCell(0);
+                conceptoCell.textContent = conceptosUnicos[i];
+
+                for (var j = 0; j < fechasUnicas.length; j++) {
+                    var fecha = fechasUnicas[j];
+                    var valorCell = row.insertCell(j + 1);
+
+                    // Buscar el valor correspondiente para la fecha actual y concepto
+                    var valor = obtenerValorPorFechaYConcepto(data, fecha, conceptosUnicos[i]);
+                    valorCell.textContent = valor;
+                }
+            }
+        }
+
+        // Función para obtener fechas únicas
+        function obtenerFechasUnicas(data) {
+            var fechasUnicas = [];
+            for (var i = 0; i < data.length; i++) {
+                if (fechasUnicas.indexOf(data[i].Fecha) === -1) {
+                    fechasUnicas.push(data[i].Fecha);
+                }
+            }
+            return fechasUnicas;
+        }
+
+        // Función para obtener conceptos únicos
+        function obtenerConceptosUnicos(data) {
+            var conceptosUnicos = [];
+            for (var i = 0; i < data.length; i++) {
+                if (conceptosUnicos.indexOf(data[i].Concepto) === -1) {
+                    conceptosUnicos.push(data[i].Concepto);
+                }
+            }
+            return conceptosUnicos;
+        }
+
+        // Función para obtener el valor para una fecha y concepto específicos
+        function obtenerValorPorFechaYConcepto(data, fecha, concepto) {
+            for (var i = 0; i < data.length; i++) {
+                if (data[i].Fecha === fecha && data[i].Concepto === concepto) {
+                    return data[i].Valor;
+                }
+            }
+            return "";
+        }
+
+        // Tu JSON de ejemplo con 20 elementos y dos fechas diferentes
+        let data =[];
+
+function CargaDatos(datosFm) {
+     let data = JSON.parse(datosFm);
+     console.log(data);
+    
+            // Llamar a la función para crear la tabla desde el JSON
+            crearTablaDesdeJSON(data);
+
+}
+
+
+    </script>
+</body>
+</html>

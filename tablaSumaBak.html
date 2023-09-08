@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Tabla de Suma de Valores</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+            margin: 20px auto;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid black;
+        }
+
+        th,
+        td {
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <table id="tablaSumaValores">
+        <thead>
+            <tr>
+                <th></th>
+                <th id="periodo1"></th>
+                <th id="periodo2"></th>
+                <th id="periodo3"></th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+
+    <script>
+        // Datos de ejemplo: un array de objetos JSON
+        var datos = [
+            { concepto: "Concepto 1", periodo: "periodo1", valor: 10 },
+            { concepto: "Concepto 2", periodo: "periodo1", valor: 20 },
+            { concepto: "Concepto 1", periodo: "periodo2", valor: 30 },
+            { concepto: "Concepto 2", periodo: "periodo2", valor: 40 },
+            { concepto: "Concepto 1", periodo: "periodo3", valor: 50 },
+            { concepto: "Concepto 2", periodo: "periodo3", valor: 60 }
+        ];
+
+        // Función para crear la tabla y calcular la suma de valores
+        function crearTabla(datos) {
+            var periodos = ["periodo1", "periodo2", "periodo3"];
+            var conceptos = [];
+
+            // Obtener la lista de conceptos
+            datos.forEach(function (item) {
+                if (!conceptos.includes(item.concepto)) {
+                    conceptos.push(item.concepto);
+                }
+            });
+
+            // Crear la fila de conceptos y calcular la suma de valores
+            var tbody = document.querySelector("#tablaSumaValores tbody");
+            conceptos.forEach(function (concepto) {
+                var fila = document.createElement("tr");
+                var sumaTotal = 0;
+                fila.innerHTML = "<th>" + concepto + "</th>";
+
+                periodos.forEach(function (periodo) {
+                    var suma = 0;
+                    datos.forEach(function (item) {
+                        if (item.concepto === concepto && item.periodo === periodo) {
+                            suma += item.valor;
+                        }
+                    });
+                    fila.innerHTML += "<td>" + suma + "</td>";
+                    sumaTotal += suma;
+                });
+
+                fila.innerHTML += "<td>" + sumaTotal + "</td>";
+                tbody.appendChild(fila);
+            });
+
+            // Crear la fila de suma total
+            var filaTotal = document.createElement("tr");
+            filaTotal.innerHTML = "<th>Total</th>";
+            var totalPeriodo = 0;
+            periodos.forEach(function (periodo) {
+                var sumaPeriodo = 0;
+                datos.forEach(function (item) {
+                    if (item.periodo === periodo) {
+                        sumaPeriodo += item.valor;
+                    }
+                });
+                filaTotal.innerHTML += "<td>" + sumaPeriodo + "</td>";
+                totalPeriodo += sumaPeriodo;
+            });
+            filaTotal.innerHTML += "<td>" + totalPeriodo + "</td>";
+            tbody.appendChild(filaTotal);
+
+            // Actualizar los títulos de los periodos
+            periodos.forEach(function (periodo, index) {
+                document.querySelector("#periodo" + (index + 1)).textContent = periodo;
+            });
+        }
+
+        // Llamar a la función para crear la tabla
+        // crearTabla(datos);
+
+        function CargaDatos(datosFm) {
+
+            // console.log(datosFm);
+            let datas = csvTextToJson(datosFm);
+            console.log(datas);
+            crearTabla(datas);
+
+
+        }
+
+
+        function csvTextToJson(csvText) {
+            const lines = csvText.trim().split(/\r\n|\n|\r/); // Detecta diferentes tipos de saltos de línea
+            const headers = lines[0].split(',').map(header => header.trim());
+            const result = [];
+            console.log(lines.length);
+
+            for (let i = 1; i < lines.length; i++) {
+                const data = lines[i].split(',').map(value => value.trim());
+                if (data.length !== headers.length) {
+                    throw new Error(`El número de columnas en la fila ${i + 1} no coincide con los encabezados.`);
+                }
+
+                const obj = {};
+                for (let j = 0; j < headers.length; j++) {
+                    obj[headers[j]] = data[j];
+                }
+                result.push(obj);
+            }
+
+            return result;
+        }
+    </script>
+</body>
+
+</html>
