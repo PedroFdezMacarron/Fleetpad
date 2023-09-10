@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabla de Ejemplo</title>
+    <style>
+        .table-container {
+            overflow-x: auto;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: auto;
+        }
+
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            white-space: nowrap; /* Evita el ajuste de texto en las celdas */
+        }
+
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: auto;
+        }
+
+        th:not(:nth-child(1)):not(:nth-child(2)),
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+            width: 5%;
+        }
+
+        tbody tr {
+            height: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Columna 1 (30 caracteres)</th>
+                    <th>Columna 2 (30 caracteres)</th>
+                    <!-- Agrega las 38 columnas restantes -->
+                    <script>
+                        for (let i = 3; i <= 40; i++) {
+                            document.write(`<th>Columna ${i}</th>`);
+                        }
+                    </script>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Agrega filas y valores aleatorios usando JavaScript -->
+                <script>
+                    for (let row = 1; row <= 4; row++) {
+                        document.write('<tr>');
+                        document.write(`<td>Valor ${row} (30 caracteres)</td>`);
+                        document.write(`<td>Valor ${row + 1} (30 caracteres)</td>`);
+                        for (let col = 3; col <= 40; col++) {
+                            const randomValue = Math.floor(Math.random() * (1000 - 10 + 1)) + 10;
+                            document.write(`<td>${randomValue}</td>`);
+                        }
+                        document.write('</tr>');
+                    }
+                </script>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
