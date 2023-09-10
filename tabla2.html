@@ -7,32 +7,32 @@
         overflow-x: auto;
       }
       table {
-        border-collapse: collapse;
-        width: auto;
-        margin: 20px auto;
-        font-size: small;
-      }
+            border-collapse: collapse;
+            width: auto;
+        }
 
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: center;
-      }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+            white-space: nowrap; /* Evita el ajuste de texto en las celdas */
+        }
 
-      th {
-        background-color: #f2f2f2;
-      }
+        th:nth-child(1),
+        td:nth-child(1),
+        th:nth-child(2),
+        td:nth-child(2) {
+            width: auto;
+        }
 
-      tr:nth-child(even) {
-        background-color: #f2f2f2;
-      }
+        th:not(:nth-child(1)):not(:nth-child(2)),
+        td:not(:nth-child(1)):not(:nth-child(2)) {
+            width: 5%;
+        }
 
-      th:first-child,
-      td:first-child {
-        width: 10%;
-        text-align: left;
-      }
+        tbody tr {
+            height: 1em;
+        }
     </style>
   </head>
 

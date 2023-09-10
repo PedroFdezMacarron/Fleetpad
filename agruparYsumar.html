@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Generar tabla desde CSV</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: blue;
+            color: white;
+        }
+
+        th:nth-child(1),
+        th:nth-child(2),
+        th:nth-child(3),
+        th:nth-child(4) {
+            background-color: orange;
+        }
+    </style>
+</head>
+<body>
+    <h1>Tabla de CSV Agrupada y Totalizada</h1>
+    <textarea id="csvInput" rows="5" cols="50"></textarea>
+    <button onclick="generarTabla()">Generar Tabla</button>
+    <div id="tablaContainer"></div>
+
+    <script>
+        function generarTabla() {
+            // Obtén el texto CSV del textarea
+            var csvText = document.getElementById("csvInput").value;
+
+            // Divide el texto en líneas
+            var lines = csvText.split("\n");
+
+            // Crea la tabla HTML
+            var tableHTML = "<table border='1'><thead><tr>";
+
+            // Obtén los encabezados de columna desde la primera línea del CSV
+            var headers = lines[0].split("\t");
+            for (var i = 0; i < headers.length; i++) {
+                tableHTML += "<th>" + headers[i] + "</th>";
+            }
+
+            tableHTML += "</tr></thead><tbody>";
+
+            // Itera sobre las filas restantes del CSV para crear los datos de la tabla
+            for (var j = 1; j < lines.length; j++) {
+                var line = lines[j].trim();
+                if (line) {
+                    var rowColumns = line.split("\t");
+
+                    tableHTML += "<tr>";
+                    for (var k = 0; k < rowColumns.length; k++) {
+                        tableHTML += "<td>" + rowColumns[k] + "</td>";
+                    }
+                    tableHTML += "</tr>";
+                }
+            }
+
+            tableHTML += "</tbody></table>";
+
+            // Muestra la tabla resultante en el contenedor
+            document.getElementById("tablaContainer").innerHTML = tableHTML;
+        }
+    </script>
+</body>
+</html>
