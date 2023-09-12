@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Convertir CSV</title>
+</head>
+<body>
+    <h1>Convertir CSV</h1>
+    <input type="file" id="csvFileInput" accept=".csv">
+    <button id="convertButton">Convertir</button>
+
+    <script>
+        document.getElementById('convertButton').addEventListener('click', function() {
+            const csvFileInput = document.getElementById('csvFileInput');
+            const selectedFile = csvFileInput.files[0];
+            
+            // const cabeceras = ["Campo 1","Factura2","Factura3","Factura4","Factura5","Factura6","Factura7","Factura8","Factura9","Factura10","Factura11","Factura12","Factura13","Factura14","Factura15","Factura16","Factura17","Factura18","Factura19","Factura20"]
+            
+            if (!selectedFile) {
+                alert('Por favor, seleccione un archivo CSV.');
+                return;
+            }
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                const csvContent = e.target.result;
+                const lines = csvContent.split('\n');
+                // Crea cabecera;
+                let outputCSV = 'Empresa;Conductor;Fecha;Concepto;Valor' + `\r\n` ;
+
+                // crea array de titulos de conceptos
+                const cadena = lines[0].replace(/\r/g,'');
+                const conceptos = cadena.split(';');
+                console.log(conceptos);
+                
+
+
+                for (let i = 1; i < lines.length; i++) {
+                    const row = lines[i].split(/[,;]/); // Separador de punto y coma o coma
+                    // coge los datos de empresa conductor y fecha
+                    let inicioFila = row[0] + ";" + row[1] +  ";"+ row[2] + ";" ;
+                    
+                    for (let j = 3; j < row.length; j++) {
+                        
+                        const campo = conceptos[j] +";" + row[j].trim();
+                        outputCSV += inicioFila + `${campo}\r\n`; // Agregar CRLF
+                    }
+                }
+
+                const blob = new Blob([outputCSV], { type: 'text/csv' });
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'nuevo_csv.csv';
+                a.style.display = 'none';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            };
+
+            reader.readAsText(selectedFile);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
